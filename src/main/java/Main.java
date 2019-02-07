@@ -1,21 +1,27 @@
 import Initiator.Initiator;
 import Responder.Responder;
 
-import java.security.InvalidAlgorithmParameterException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import java.security.*;
 import java.util.ArrayList;
 
 public class Main {
 
-    private static ArrayList<Responder> responders;
-
     public static void main(String[] args) throws InvalidAlgorithmParameterException,
             NoSuchAlgorithmException,
-            NoSuchProviderException {
+            NoSuchProviderException,
+            IllegalBlockSizeException,
+            InvalidKeyException,
+            BadPaddingException,
+            SignatureException,
+            NoSuchPaddingException {
 
-
+        ArrayList<Responder> responders = new ArrayList<Responder>();
+        Responder test1 = new Responder();
+        responders.add(test1);
         Initiator test = new Initiator(responders);
-
+        test.EncryptAndSendKey();
     }
 }

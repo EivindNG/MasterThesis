@@ -25,6 +25,10 @@ public class Responder {
         this.PkSk = new PublicPrivatKey();
     }
 
+    public PublicPrivatKey getPkSk() {
+        return PkSk;
+    }
+
     public void ConfirmEncryptionKey(byte[] sign, Encryption data, Initiator initiator) throws
             NoSuchPaddingException,
             NoSuchAlgorithmException,
@@ -37,6 +41,8 @@ public class Responder {
         if(VerifySignature.Verify(sign, initiator.getPkSk().getPair().getPublic(), data.getCipherText())){
 
             this.encryptionKey = Decryption.Decrypt(data,PkSk.getPair().getPrivate());
+            String key = new String(encryptionKey);
+            System.out.println("encryption key: " + key);
         }
     }
 }
