@@ -7,7 +7,6 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import java.math.BigInteger;
 import java.security.*;
 
 public class Encryption {
@@ -37,5 +36,9 @@ public class Encryption {
     /*
     https://ieeexplore.ieee.org/document/6024664
     https://www.codeproject.com/Tips/1071190/Encryption-and-Decryption-of-Data-using-Elliptic-C
+
+    https://link.springer.com/content/pdf/10.1007%2F3-540-39799-X_12.pdf
+    https://www.sciencedirect.com/science/article/pii/S1877050915006705 public key encryption protocol
+
     */
 }
