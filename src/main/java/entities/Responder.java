@@ -1,6 +1,6 @@
-package Responder;
+package entities;
 
-import Initiator.Initiator;
+import entities.Initiator;
 import crypto.Decryption;
 import crypto.Encryption;
 import crypto.PublicPrivatKey;
@@ -12,7 +12,7 @@ import javax.crypto.NoSuchPaddingException;
 import java.security.*;
 
 
-public class Responder {
+public class Responder extends AbstractEntity{
 
     private byte[] encryptionKey;
     PublicPrivatKey PkSk;

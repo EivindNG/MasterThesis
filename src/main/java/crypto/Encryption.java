@@ -33,6 +33,7 @@ public class Encryption {
     public byte[] getCipherText() {
         return cipherText;
     }
+
     /*
     https://ieeexplore.ieee.org/document/6024664
     https://www.codeproject.com/Tips/1071190/Encryption-and-Decryption-of-Data-using-Elliptic-C

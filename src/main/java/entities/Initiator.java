@@ -1,32 +1,46 @@
-package Initiator;
+package entities;
 
-import Responder.Responder;
+import crypto.Constants;
 import crypto.Encryption;
 import crypto.PublicPrivatKey;
 import crypto.Signing;
+import org.bouncycastle.math.ec.ECPoint;
+import util.IdMaker;
+import util.PublicKeyList;
 
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import java.math.BigInteger;
 import java.security.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class Initiator {
+public class Initiator extends AbstractEntity{
 
-    private PublicPrivatKey PkSk;
-    private ArrayList<Responder> responders;
+
     private Key encryptionKey;
     private String testKey = "testtesttesttest";
+    private HashMap<AbstractEntity, PublicKey> parties;
 
-    public Initiator(ArrayList<Responder> responders) throws
+
+    public Initiator() throws
             NoSuchAlgorithmException,
             NoSuchProviderException,
             InvalidAlgorithmParameterException {
 
-        this.PkSk = new PublicPrivatKey();
-        this.responders = responders;
+        PublicPrivatKey publicPrivatKey = new PublicPrivatKey();
 
+        this.SkPk = publicPrivatKey.getPair();
+        this.id = IdMaker.getNextId();
+        PublicKeyList.getKeyList().put(this, SkPk.getPublic());
+
+
+
+        ECPoint ponit = Constants.CURVE_SPEC.getG().multiply(new BigInteger(256, new SecureRandom()));
+
+        System.out.println("punkt" + ponit);
     }
 
     public void EncryptAndSendKey() throws
@@ -46,7 +60,7 @@ public class Initiator {
         }
     }
 
-    public PublicPrivatKey getPkSk() {
-        return PkSk;
+    public KeyPair getPkSk() {
+        return SkPk;
     }
 }

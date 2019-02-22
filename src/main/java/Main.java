@@ -1,5 +1,6 @@
-import Initiator.Initiator;
-import Responder.Responder;
+import entities.Initiator;
+import entities.Responder;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -17,6 +18,8 @@ public class Main {
             BadPaddingException,
             SignatureException,
             NoSuchPaddingException {
+
+        Security.addProvider(new BouncyCastleProvider());
 
         ArrayList<Responder> responders = new ArrayList<Responder>();
         Responder test1 = new Responder();
