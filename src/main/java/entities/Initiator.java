@@ -10,18 +10,16 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.security.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static com.sun.tools.doclint.Entity.Tau;
+
 
 public class Initiator extends AbstractEntity{
 
-
-    private Key encryptionKey;
-    private String testKey = "testtesttesttest";
     private HashMap<AbstractEntity, PublicKey> parties;
     private SymmetricKey SharedEncryptionKey;
 
@@ -31,11 +29,9 @@ public class Initiator extends AbstractEntity{
             NoSuchProviderException,
             InvalidAlgorithmParameterException {
 
-        PublicPrivatKey publicPrivatKey = new PublicPrivatKey();
-
-        this.SkPk = publicPrivatKey.getPair();
+        this.SkPk = new PublicPrivatKey();
         this.id = IdMaker.getNextId();
-        PublicKeyList.getKeyList().put(this, SkPk.getPublic());
+        PublicKeyList.getKeyList().put(this, SkPk.getPair().getPublic());
 
 
 
@@ -51,7 +47,7 @@ public class Initiator extends AbstractEntity{
             BadPaddingException,
             NoSuchProviderException,
             InvalidKeyException,
-            SignatureException {
+            SignatureException, IOException {
 
         SecureRandom random = new SecureRandom();
         byte KeyBytes[] = new byte[48];
@@ -63,25 +59,15 @@ public class Initiator extends AbstractEntity{
 
             if (entity instanceof Responder){
                 Responder responder = (Responder) entity;
-                Encryption encryptedKey = new Encryption(responder.getPkSk().getPair().getPublic(), SharedEncryptionKey);
+                Encryption encryptedKey = new Encryption(responder.getPk(), SharedEncryptionKey);
 
+                byte[] signature = Signing.Sign(SkPk.getPair(),encryptedKey.getCipherText());
+                responder.ConfirmEncryptionKey(signature,encryptedKey,this);
             }
+
             else {
                 continue;
             }
         }
-
-
-
-        for(Responder responder: responders) {
-            Encryption encryptedKey = new Encryption(responder.getPkSk().getPair().getPublic(),testKey.getBytes());
-            byte [] signature = Signing.Sign(PkSk.getPair(),encryptedKey.getCipherText());
-
-            responder.ConfirmEncryptionKey(signature,encryptedKey,this);
-        }
-    }
-
-    public KeyPair getPkSk() {
-        return SkPk;
     }
 }

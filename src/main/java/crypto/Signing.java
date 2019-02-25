@@ -12,7 +12,7 @@ public class Signing {
             SignatureException,
             NoSuchProviderException {
 
-        Security.addProvider(new BouncyCastleProvider());
+
         Signature sign = Signature.getInstance("SHA256withECDSA","BC");
         sign.initSign(pair.getPrivate());
         sign.update(Stufftosign);

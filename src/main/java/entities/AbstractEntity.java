@@ -1,18 +1,20 @@
 package entities;
 
+import crypto.PublicPrivatKey;
+
 import java.math.BigInteger;
-import java.security.KeyPair;
+import java.security.PublicKey;
 
 
 public abstract class AbstractEntity {
     protected BigInteger id;
-    protected KeyPair SkPk;
+    protected PublicPrivatKey SkPk;
 
     public BigInteger getId() {
         return id;
     }
 
-    public KeyPair getSkPk() {
-        return SkPk;
+    public PublicKey getPk() {
+        return SkPk.getPair().getPublic();
     }
 }

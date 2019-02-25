@@ -5,6 +5,8 @@ import crypto.Decryption;
 import crypto.Encryption;
 import crypto.PublicPrivatKey;
 import crypto.VerifySignature;
+import util.IdMaker;
+import util.PublicKeyList;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -22,11 +24,9 @@ public class Responder extends AbstractEntity{
             NoSuchAlgorithmException,
             NoSuchProviderException {
 
-        this.PkSk = new PublicPrivatKey();
-    }
-
-    public PublicPrivatKey getPkSk() {
-        return PkSk;
+        this.SkPk = new PublicPrivatKey();
+        this.id = IdMaker.getNextId();
+        PublicKeyList.getKeyList().put(this, SkPk.getPair().getPublic());
     }
 
     public void ConfirmEncryptionKey(byte[] sign, Encryption data, Initiator initiator) throws
