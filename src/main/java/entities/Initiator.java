@@ -1,9 +1,6 @@
 package entities;
 
-import crypto.Constants;
-import crypto.Encryption;
-import crypto.PublicPrivatKey;
-import crypto.Signing;
+import crypto.*;
 import org.bouncycastle.math.ec.ECPoint;
 import util.IdMaker;
 import util.PublicKeyList;
@@ -12,10 +9,13 @@ import util.PublicKeyList;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.SecretKeySpec;
 import java.math.BigInteger;
 import java.security.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import static com.sun.tools.doclint.Entity.Tau;
 
 public class Initiator extends AbstractEntity{
 
@@ -23,6 +23,7 @@ public class Initiator extends AbstractEntity{
     private Key encryptionKey;
     private String testKey = "testtesttesttest";
     private HashMap<AbstractEntity, PublicKey> parties;
+    private SymmetricKey SharedEncryptionKey;
 
 
     public Initiator() throws
@@ -51,6 +52,26 @@ public class Initiator extends AbstractEntity{
             NoSuchProviderException,
             InvalidKeyException,
             SignatureException {
+
+        SecureRandom random = new SecureRandom();
+        byte KeyBytes[] = new byte[48];
+        random.nextBytes(KeyBytes);
+
+        this.SharedEncryptionKey = new SymmetricKey(KeyBytes);
+
+        for (AbstractEntity  entity: PublicKeyList.getKeyList().keySet()){
+
+            if (entity instanceof Responder){
+                Responder responder = (Responder) entity;
+                Encryption encryptedKey = new Encryption(responder.getPkSk().getPair().getPublic(), SharedEncryptionKey);
+
+            }
+            else {
+                continue;
+            }
+        }
+
+
 
         for(Responder responder: responders) {
             Encryption encryptedKey = new Encryption(responder.getPkSk().getPair().getPublic(),testKey.getBytes());

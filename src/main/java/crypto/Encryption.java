@@ -7,26 +7,32 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.security.*;
 
 public class Encryption {
     private byte[] cipherText;
 
-    public Encryption(PublicKey pubkey, byte[] data) throws
+    public Encryption(PublicKey pubkey, SymmetricKey symmetricKey) throws
             NoSuchPaddingException,
             NoSuchAlgorithmException,
             NoSuchProviderException,
             InvalidKeyException,
             BadPaddingException,
-            IllegalBlockSizeException {
+            IllegalBlockSizeException, IOException {
 
-        Security.addProvider(new BouncyCastleProvider());
-        IESCipher c1 = new org.bouncycastle.jcajce.provider.asymmetric.ec.IESCipher.ECIES();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ObjectOutputStream objectStream = new ObjectOutputStream(outputStream);
+        objectStream.writeObject(symmetricKey);
+
+        byte dataToBeEncrypted[] = outputStream.toByteArray();
+
 
         Cipher cipher = Cipher.getInstance("ECIES","BC");
-
         cipher.init(Cipher.ENCRYPT_MODE, pubkey);
-        this.cipherText = cipher.doFinal(data);
+        this.cipherText = cipher.doFinal(dataToBeEncrypted);
 
     }
 
