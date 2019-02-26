@@ -34,10 +34,11 @@ public class Initiator extends AbstractEntity{
         PublicKeyList.getKeyList().put(this, SkPk.getPair().getPublic());
 
 
-
+        /*
         ECPoint ponit = Constants.CURVE_SPEC.getG().multiply(new BigInteger(256, new SecureRandom()));
 
         System.out.println("punkt" + ponit);
+        */
     }
 
     public void EncryptAndSendKey() throws
@@ -47,7 +48,7 @@ public class Initiator extends AbstractEntity{
             BadPaddingException,
             NoSuchProviderException,
             InvalidKeyException,
-            SignatureException, IOException {
+            SignatureException, IOException, ClassNotFoundException {
 
         SecureRandom random = new SecureRandom();
         byte KeyBytes[] = new byte[48];

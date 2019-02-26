@@ -1,23 +1,23 @@
 package entities;
 
+import crypto.*;
 import entities.Initiator;
-import crypto.Decryption;
-import crypto.Encryption;
-import crypto.PublicPrivatKey;
-import crypto.VerifySignature;
 import util.IdMaker;
 import util.PublicKeyList;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.spec.IvParameterSpec;
+import java.io.IOException;
 import java.security.*;
+import java.util.Base64;
 
 
 public class Responder extends AbstractEntity{
 
-    private byte[] encryptionKey;
-    PublicPrivatKey PkSk;
+    private SymmetricKey SharedEncryptionKey;
+
 
     public Responder() throws
             InvalidAlgorithmParameterException,
@@ -36,13 +36,19 @@ public class Responder extends AbstractEntity{
             BadPaddingException,
             NoSuchProviderException,
             InvalidKeyException,
-            SignatureException {
+            SignatureException,
+            IOException,
+            ClassNotFoundException {
 
-        if(VerifySignature.Verify(sign, initiator.getPkSk().getPair().getPublic(), data.getCipherText())){
+        if(VerifySignature.Verify(sign, PublicKeyList.getKeyList().get(initiator), data.getCipherText())){
 
-            this.encryptionKey = Decryption.Decrypt(data,PkSk.getPair().getPrivate());
-            String key = new String(encryptionKey);
-            System.out.println("encryption key: " + key);
+            this.SharedEncryptionKey = Decryption.Decrypt(data,this.SkPk.getPair().getPrivate());
+
+            System.out.println("encryption key: "
+                    + Base64.getEncoder().encodeToString(SharedEncryptionKey.getSEK().getEncoded())
+                    + "\nIV: "
+                    + Base64.getEncoder().encodeToString((new IvParameterSpec(SharedEncryptionKey.getIVbytes()).getIV()))
+            );
         }
     }
 }

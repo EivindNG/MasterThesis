@@ -5,6 +5,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+import java.io.IOException;
 import java.security.*;
 import java.util.ArrayList;
 
@@ -17,14 +18,16 @@ public class Main {
             InvalidKeyException,
             BadPaddingException,
             SignatureException,
-            NoSuchPaddingException {
+            NoSuchPaddingException,
+            IOException,
+            ClassNotFoundException {
 
         Security.addProvider(new BouncyCastleProvider());
 
         ArrayList<Responder> responders = new ArrayList<Responder>();
         Responder test1 = new Responder();
         responders.add(test1);
-        Initiator test = new Initiator(responders);
+        Initiator test = new Initiator();
         test.EncryptAndSendKey();
     }
 }
