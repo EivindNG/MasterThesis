@@ -24,9 +24,8 @@ public class Main {
 
         Security.addProvider(new BouncyCastleProvider());
 
-        ArrayList<Responder> responders = new ArrayList<Responder>();
         Responder test1 = new Responder();
-        responders.add(test1);
+
         Initiator test = new Initiator();
         test.EncryptAndSendKey();
     }
